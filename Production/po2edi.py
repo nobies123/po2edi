@@ -139,9 +139,6 @@ class SFTPUploader:
         self.button_frame.pack(pady=10)
         self.button_frame.pack_forget()
 
-    def check_for_updates(self):
-        messagebox.showinfo("Check for Updates", "This will check for updates manually (to be implemented).")
-
     def browse_folder(self):
         folder = filedialog.askdirectory()
         if folder:
@@ -315,16 +312,17 @@ class SFTPUploader:
     def check_for_updates(self):
         try:
             with urllib.request.urlopen(
-                    "https://raw.githubusercontent.com/nobies123/po2edi/main/version.txt") as response:
-                latest = response.read().decode().strip()
+                    "https://raw.githubusercontent.com/nobies123/po2edi/master/version.txt") as response:
+                latest_version = response.read().decode().strip()
 
-            if latest != __version__:
-                if messagebox.askyesno("Update Available", f"A newer version ({latest}) is available. Open GitHub?"):
+            if latest_version != __version__:
+                if messagebox.askyesno("Update Available",
+                                       f"A newer version ({latest_version}) is available. Open GitHub?"):
                     os.system("start https://github.com/nobies123/po2edi/releases")
             else:
-                messagebox.showinfo("Up to Date", "You have the latest version.")
+                messagebox.showinfo("Up to Date", "You are using the latest version.")
         except Exception as e:
-            messagebox.showerror("Error", f"Could not check for updates:\n{e}")
+            messagebox.showerror("Could not check for updates", f"{e}")
 
 
 if __name__ == "__main__":
